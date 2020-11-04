@@ -1,5 +1,5 @@
 library(ggplot2)
-library(dplyr)
+library(data.table)
 sample.df <- read.csv("data/sample.csv")
 
 colnames(sample.df) <- c(
@@ -54,6 +54,8 @@ for (country in distinct(sample.df, Country)$Country){
   by_country[[country]] <- by_country[[country]][-8,]
 }
 
+df <- rbindlist(by_country)
+
 # Calculating interquartile range to remove outliers
 q1 <- quantile(df$GDP.Growth.Rate, 0.25, na.rm = TRUE)
 med <- median(df$GDP.Growth.Rate, na.rm = TRUE)
@@ -66,22 +68,38 @@ no.outliers <- subset(
 )
 
 Tariff.GDP.Growth <- ggplot(
-  no.outliers,
+  subset(no.outliers, Year == "2017-01-01"),
   aes(x = Tariff.Rate, y = GDP.Growth.Rate)
   ) +
-  geom_point(aes(color = factor(Region))) +
-  geom_smooth(method = "lm", se = F) +
+  geom_point(aes(color = factor(Region), size = GDP.per.Capita)) +
   xlab("Tariff Rate") +
   ylab("GDP Growth Rate") +
+  ggtitle("2017") +
+  theme(plot.title = element_text(hjust = 0.5)) +
   geom_text(
     aes(label = Country),
-    subset(
-      no.outliers,
-      Year == "2017-01-01" |
-      GDP.Growth.Rate < 0 | GDP.Growth.Rate > 7
-      ),
+    subset(no.outliers, Year == "2017-01-01"),
     color = "gray20",
-    check_overlap = T
+    check_overlap = T,
+    position = position_dodge(width = 3.25)
     )
 
 Tariff.GDP.Growth
+
+Tariff.Public.Debt <- ggplot(
+  no.outliers,
+  aes(x = Tariff.Rate, y = Public.Debt)
+  ) + 
+  geom_point(aes(color = factor(Region))) +
+  geom_smooth(method = "lm", se = F) +
+  xlab("Tariff Rate") +
+  ylab("Public Debt") +
+  geom_text(
+    aes(label = Country),
+    subset(no.outliers, Year == "2017-01-01"),
+    color = "gray20",
+    check_overlap = T,
+    position = position_dodge(width = 3.25)
+  )
+
+Tariff.Public.Debt
