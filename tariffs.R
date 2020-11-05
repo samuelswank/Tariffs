@@ -1,4 +1,5 @@
 library(ggplot2)
+library(dplyr)
 library(data.table)
 sample.df <- read.csv("data/sample.csv")
 
@@ -106,7 +107,8 @@ Tariff.GDP.per.Capita <- ggplot(
     aes(label = Country),
     subset(no.outliers, Year == as.Date("2017-01-01")),
     color = "gray20",
-    check_overlap = T
+    check_overlap = T,
+    position = position_dodge(width = 3.25)
   ) +
   theme_light() +
   theme(plot.title = element_text(hjust = 0.5))
