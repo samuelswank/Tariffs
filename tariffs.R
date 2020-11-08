@@ -59,6 +59,7 @@ df <- rbindlist(by_country)
 
 df$Year <- as.Date(df$Year)
 
+
 # Calculating interquartile range to remove outliers
 q1 <- quantile(df$GDP.Growth.Rate, 0.25, na.rm = TRUE)
 med <- median(df$GDP.Growth.Rate, na.rm = TRUE)
@@ -69,6 +70,7 @@ range <- q3 - q1
 no.outliers <- subset(
   df, GDP.Growth.Rate > (q1 - 1.5 * range) & GDP.Growth.Rate < (q3 + 1.5 * range)
 )
+
 
 Tariff.GDP.Growth <- ggplot(
   subset(no.outliers, Year == "2017-01-01"),
@@ -87,9 +89,12 @@ Tariff.GDP.Growth <- ggplot(
     position = position_dodge(width = 3.25)
     ) +
   theme_light() +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous(label = scales::percent_format(scale = 1)) +
+  scale_y_continuous(label = scales::percent_format(scale = 1))
 
 Tariff.GDP.Growth
+
 
 Tariff.GDP.per.Capita <- ggplot(
   subset(
@@ -101,6 +106,7 @@ Tariff.GDP.per.Capita <- ggplot(
   geom_point(aes(color = factor(Region))) +
   geom_smooth(method = "loess", se = F) +
   xlab("Tariff Rate") +
+  ylab("US Dollars in Billions") +
   ggtitle("Per Capita GDP") +
   labs(color = "Region") +
   geom_text(
@@ -108,9 +114,11 @@ Tariff.GDP.per.Capita <- ggplot(
     subset(no.outliers, Year == as.Date("2017-01-01")),
     color = "gray20",
     check_overlap = T,
-    position = position_dodge(width = 3.25)
+    position = position_dodge(width = 4)
   ) +
   theme_light() +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous(labels = scales::percent_format(scale = 1)) +
+  scale_y_continuous(labels = scales::number_format(big.mark = ","))
 
 Tariff.GDP.per.Capita
