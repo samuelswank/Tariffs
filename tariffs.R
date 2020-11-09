@@ -77,9 +77,8 @@ Tariff.GDP.Growth <- ggplot(
   aes(x = Tariff.Rate, y = GDP.Growth.Rate)
   ) +
   geom_point(aes(color = factor(Region), size = GDP.per.Capita)) +
-  xlab("Tariff Rate") +
-  ylab("GDP Growth Rate") +
-  ggtitle("2017") +
+  xlab("Tariff Rate (2016)") +
+  ylab("GDP Growth Rate (2017)") +
   labs(color = "Region", size = "Per Capita GDP") +
   geom_text(
     aes(label = Country),
