@@ -59,7 +59,6 @@ df <- rbindlist(by_country)
 
 df$Year <- as.Date(df$Year)
 
-
 # Calculating interquartile range to remove outliers
 q1 <- quantile(df$GDP.Growth.Rate, 0.25, na.rm = TRUE)
 med <- median(df$GDP.Growth.Rate, na.rm = TRUE)
