@@ -103,7 +103,7 @@ Tariff.GDP.per.Capita <- ggplot(
   ) +
   geom_point(aes(color = factor(Region))) +
   geom_smooth(method = "loess", se = F) +
-  xlab("Tariff Rate") +
+  xlab("Previous Year's Tariff Rate") +
   ylab("US Dollars in Billions") +
   ggtitle("Per Capita GDP") +
   labs(color = "Region") +
